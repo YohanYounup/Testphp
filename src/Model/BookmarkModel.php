@@ -3,18 +3,17 @@
 namespace App\Model;
 
 use App\Entity\Bookmark;
-use App\Entity\BookmarkImg;
-use App\Entity\BookmarkMedia;
+use App\Factory\ProviderFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use Embed\Embed\Extractor;
-use stdClass;
 
 class BookmarkModel 
 {
     private $entityManager;
+    private $providerFactory;
 
-    public function __construct( EntityManagerInterface $entityManager){
+    public function __construct( EntityManagerInterface $entityManager, ProviderFactory $providerFactory){
         $this->entityManager = $entityManager;
+        $this->providerFactory = $providerFactory;
     }
 
     public function getAllBookmarksData()
@@ -28,29 +27,9 @@ class BookmarkModel
 
     public function addBookmark($requestContent)
     {
-        $bookmark = null;
-       
-        switch ($requestContent->type) {
-            case 'image':
-                
-                $bookmark = new BookmarkImg();
-                
-
-                break;
-            
-            case 'media':
-                
-                $bookmark = new BookmarkMedia();
-                
-    
-                break;
-            
-            default:
-            $bookmark = new Bookmark();
-           
-                break;
-        }
-        $bookmark->jsonDeserialize($requestContent);
+        
+        $provider = $this->providerFactory->getProvider($requestContent->providerName);
+        $bookmark = $provider->getBookmark($requestContent);
         $entityRepo = $this->entityManager->getRepository($bookmark::class);
         $entityRepo->persist($bookmark);
         $entityRepo->flush();
