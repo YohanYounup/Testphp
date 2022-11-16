@@ -41,13 +41,13 @@ class BookmarkController extends AbstractController
     public function addBookmark(Request $request): Response
     {
         $embed = new Embed();
-        $requestContent = $embed->get($request->getContent());
-        $array = $this->bookmarkModel->addBookmark($requestContent);
-        if(!$array){
+        $requestContent = $embed->get($request->get('url'));
+        $result = $this->bookmarkModel->addBookmark($requestContent);
+        if($result){
 
-            return new Response(204);
+            return new Response('',204);
         }else{
-            return new Response(500);
+            return new Response('',500);
         }
         
     }
@@ -61,9 +61,9 @@ class BookmarkController extends AbstractController
         $array = $this->bookmarkModel->deleteBookmark($request->query->get('id'));
         if(!$array){
 
-            return new Response(204);
+            return new Response('',204);
         }else{
-            return new Response(404);
+            return new Response('',404);
         }
     }
   

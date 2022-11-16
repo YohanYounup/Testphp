@@ -18,12 +18,12 @@ class ProviderFactory
   public function getProvider($provider)
   {
    
-    switch ($provider->providerName) {
-        case 'flickr':
+    switch ($provider) {
+        case 'Flickr':
             $provider = $this->flickrProvider;
             break;
         
-        case 'vimeo':
+        case 'Vimeo':
             $provider = $this->vimeoProvider;
             break;
 

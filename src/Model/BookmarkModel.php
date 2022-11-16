@@ -32,12 +32,11 @@ class BookmarkModel
         $provider = $this->providerFactory->getProvider($requestContent->providerName);
         $bookmark = $provider->getBookmark($requestContent);
         try {
-            $entityRepo = $this->entityManager->getRepository($bookmark::class);
-            $entityRepo->persist($bookmark);
-            $entityRepo->flush();
+            $this->entityManager->persist($bookmark);
+            $this->entityManager->flush();
            
-        } catch (Exception $e) {
-            dump($e);
+        } catch (Exception) {
+           
             return false;
         }
       
@@ -58,8 +57,8 @@ class BookmarkModel
                     $entityRepo->flush();
                    
 
-                } catch (Exception $e) {
-                    dump($e);
+                } catch (Exception ) {
+                   
                     return 500;
                 }
             }else{
