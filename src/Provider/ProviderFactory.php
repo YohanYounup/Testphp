@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Factory;
+namespace App\Provider;
 
-use Embed\Embed;
+
 
 class ProviderFactory 
 {

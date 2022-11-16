@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Factory;
+namespace App\Provider;
 
 use App\Entity\BookmarkImg;
 use DateTime;

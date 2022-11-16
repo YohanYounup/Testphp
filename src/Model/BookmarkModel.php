@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use App\Entity\Bookmark;
-use App\Factory\ProviderFactory;
+use App\Provider\ProviderFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +36,8 @@ class BookmarkModel
             $entityRepo->persist($bookmark);
             $entityRepo->flush();
            
-        } catch (Exception) {
+        } catch (Exception $e) {
+            dump($e);
             return false;
         }
       
@@ -57,7 +58,8 @@ class BookmarkModel
                     $entityRepo->flush();
                    
 
-                } catch (Exception) {
+                } catch (Exception $e) {
+                    dump($e);
                     return 500;
                 }
             }else{
