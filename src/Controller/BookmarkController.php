@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Model\BookmarkModel;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +43,13 @@ class BookmarkController extends AbstractController
         $embed = new Embed();
         $requestContent = $embed->get($request->getContent());
         $array = $this->bookmarkModel->addBookmark($requestContent);
-        return new JsonResponse( $array );
+        if(!$array){
+
+            return new Response(204);
+        }else{
+            return new Response(500);
+        }
+        
     }
 
     #[Route(
@@ -54,7 +59,12 @@ class BookmarkController extends AbstractController
     public function deleteBookmark(Request $request): response
     {
         $array = $this->bookmarkModel->deleteBookmark($request->query->get('id'));
-        return new JsonResponse( $array );
+        if(!$array){
+
+            return new Response(204);
+        }else{
+            return new Response(404);
+        }
     }
   
 }

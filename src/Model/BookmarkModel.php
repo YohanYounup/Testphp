@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Entity\Bookmark;
 use App\Factory\ProviderFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class BookmarkModel 
@@ -30,21 +31,41 @@ class BookmarkModel
         
         $provider = $this->providerFactory->getProvider($requestContent->providerName);
         $bookmark = $provider->getBookmark($requestContent);
-        $entityRepo = $this->entityManager->getRepository($bookmark::class);
-        $entityRepo->persist($bookmark);
-        $entityRepo->flush();
-        return new Response('', 200);
+        try {
+            $entityRepo = $this->entityManager->getRepository($bookmark::class);
+            $entityRepo->persist($bookmark);
+            $entityRepo->flush();
+           
+        } catch (Exception) {
+            return false;
+        }
+      
+        return true;
     }
-
 
 
     public function deleteBookmark($requestContent)
     {
-        $entityRepo = $this->entityManager->getRepository(Bookmark::class);
-        $product = $entityRepo->findOneBy($requestContent);
-        $entityRepo->remove($product);
-        $entityRepo->flush();
-        return new Response('', 202);
+       
+            $entityRepo = $this->entityManager->getRepository(Bookmark::class);
+            $product = $entityRepo->findOneBy($requestContent);
+
+            if(!empty($product)){
+                try {
+
+                    $entityRepo->remove($product);
+                    $entityRepo->flush();
+                   
+
+                } catch (Exception) {
+                    return 500;
+                }
+            }else{
+                return 'Not_Found';
+                
+            }
+       
+            return 204;
     }
   
 }
