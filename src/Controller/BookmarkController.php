@@ -48,12 +48,12 @@ class BookmarkController extends AbstractController
     }
 
     #[Route(
-        '/bookmarks',
+        '/bookmarks/{id}',
         methods: ['DELETE']
         )]
-    public function deleteBookmark(): response
+    public function deleteBookmark(Request $request): response
     {
-        $array = $this->bookmarkModel->deleteBookmark();
+        $array = $this->bookmarkModel->deleteBookmark($request->query->get('id'));
         return new JsonResponse( $array );
     }
   

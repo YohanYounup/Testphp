@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Entity\Bookmark;
 use App\Factory\ProviderFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookmarkModel 
 {
@@ -21,7 +22,6 @@ class BookmarkModel
        
         $entityRepo = $this->entityManager->getRepository(Bookmark::class);
         $data = $entityRepo->findAll();
-        dump($data);
         return  $data ;
     }
 
@@ -33,16 +33,18 @@ class BookmarkModel
         $entityRepo = $this->entityManager->getRepository($bookmark::class);
         $entityRepo->persist($bookmark);
         $entityRepo->flush();
-        
+        return new Response('', 200);
     }
 
 
 
-    public function deleteBookmark()
+    public function deleteBookmark($requestContent)
     {
         $entityRepo = $this->entityManager->getRepository(Bookmark::class);
-        $product = $entityRepo->find('1');
-        return  $product ;
+        $product = $entityRepo->findOneBy($requestContent);
+        $entityRepo->remove($product);
+        $entityRepo->flush();
+        return new Response('', 202);
     }
   
 }

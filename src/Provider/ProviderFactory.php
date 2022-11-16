@@ -2,30 +2,33 @@
 
 namespace App\Factory;
 
+use Embed\Embed;
 
 class ProviderFactory 
 {
     private $flickrProvider;
     private $vimeoProvider;
 
+
     public function __construct( VimeoProvider $vimeoProvider, FlickrProvider $flickrProvider){
         $this->vimeoProvider = $vimeoProvider;
         $this->flickrProvider = $flickrProvider;
     }
   
-  public function getProvider($ProviderName)
+  public function getProvider($provider)
   {
-    switch ($ProviderName) {
+   
+    switch ($provider->providerName) {
         case 'flickr':
             $provider = $this->flickrProvider;
             break;
-        // Another Provider
-        // case 'vimeo':
-        //     $provider = $this->vimeoProvider;
-        //     break;
+        
+        case 'vimeo':
+            $provider = $this->vimeoProvider;
+            break;
 
         default:
-            $provider = $this->vimeoProvider;
+            $provider = $this->unknowProvider;
             break;
     }
     return $provider;
